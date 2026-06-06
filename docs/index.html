@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>零代码用 AI 做官网的完整方法 — ai-website-building</title>
+<meta name="description" content="给完全不懂代码的市场、运营、产品的实操手册：用 AI 从零做出能交付给开发上线的官网原型。覆盖调研、分模块生成、逐块微调、设计规范、图片处理、移动端适配、避坑清单、省 token 策略、交付开发。">
+<meta name="keywords" content="AI 做官网,零代码做网站,AI 生成网页,落地页制作,AI 建站,不会代码做网页,Claude 做官网,AI 网页设计,Tailwind 模板,官网原型,非技术人员做网站">
+<meta name="author" content="pennyops">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pencil20388-eng.github.io/ai-website-building/">
+<meta property="og:title" content="零代码用 AI 做官网的完整方法">
+<meta property="og:description" content="给不懂代码的人：用 AI 从零做出能交付上线的官网。调研、生成、微调、避坑、交付全流程。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pencil20388-eng.github.io/ai-website-building/">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="零代码用 AI 做官网的完整方法">
+<meta name="twitter:description" content="给不懂代码的人：用 AI 从零做出能交付上线的官网。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#fbfbfa;
+--ink:#16161a;
+--muted:#6e6e76;
+--line:#e7e7e3;
+--accent:#2b6cff;
+--accent-soft:#eef3ff;
+--card:#ffffff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+background:var(--bg);
+color:var(--ink);
+font-family:'Noto Sans SC',sans-serif;
+font-weight:400;
+line-height:1.75;
+-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+
+/* nav */
+nav{position:sticky;top:0;background:rgba(251,251,250,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:10;}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;}
+nav .brand{font-weight:700;font-size:15px;}
+nav .brand span{color:var(--accent);}
+nav a.cta{font-size:13px;background:var(--ink);color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:500;}
+
+/* hero */
+.hero{padding:90px 0 70px;border-bottom:1px solid var(--line);}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);background:var(--accent-soft);padding:5px 12px;border-radius:20px;margin-bottom:24px;}
+.hero h1{font-size:clamp(32px,5.5vw,52px);font-weight:900;line-height:1.2;letter-spacing:-1px;max-width:18ch;}
+.hero p.sub{font-size:clamp(16px,2.5vw,19px);color:var(--muted);margin-top:22px;max-width:46ch;font-weight:300;}
+.hero .actions{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;}
+.btn{text-decoration:none;font-size:15px;font-weight:500;padding:13px 26px;border-radius:10px;transition:all .2s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#1a5aef;}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn-ghost:hover{border-color:var(--ink);}
+.hero .meta{margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);}
+
+/* principle band */
+.band{background:var(--ink);color:#fff;padding:54px 0;}
+.band h2{font-size:clamp(22px,3.5vw,30px);font-weight:700;letter-spacing:-.5px;}
+.band h2 b{color:#7aa5ff;}
+.band p{color:#b8b8c0;margin-top:14px;font-weight:300;max-width:54ch;font-size:16px;}
+
+/* sections */
+section{padding:64px 0;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+section h2.title{font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:-.5px;margin-bottom:10px;}
+section p.lead{color:var(--muted);font-weight:300;max-width:56ch;margin-bottom:34px;}
+
+/* coverage grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.cell{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;transition:all .2s;}
+.cell:hover{border-color:var(--accent);transform:translateY(-2px);}
+.cell .k{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:8px;}
+.cell h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+.cell p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.6;}
+
+/* flow steps */
+.steps{display:grid;grid-template-columns:1fr;gap:0;}
+.step{display:grid;grid-template-columns:44px 1fr;gap:20px;padding:24px 0;border-bottom:1px solid var(--line);align-items:start;}
+.step:last-child{border-bottom:none;}
+.step .n{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:500;color:#fff;background:var(--accent);width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.step h3{font-size:17px;font-weight:700;margin-bottom:5px;}
+.step p{font-size:14.5px;color:var(--muted);font-weight:300;}
+
+/* honesty box */
+.honesty{background:var(--accent-soft);border:1px solid #d4e0ff;border-radius:16px;padding:32px;}
+.honesty h3{font-size:18px;font-weight:700;margin-bottom:14px;}
+.honesty .row{display:flex;gap:12px;padding:9px 0;font-size:15px;align-items:baseline;}
+.honesty .row .tag{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 8px;border-radius:5px;flex-shrink:0;font-weight:500;}
+.honesty .yes .tag{background:#dcf5e3;color:#1a7a3e;}
+.honesty .no .tag{background:#fde0e0;color:#b53030;}
+.honesty .row span:last-child{color:#3a3a44;font-weight:300;}
+
+/* install */
+.code{background:var(--ink);color:#e8e8ec;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.95;padding:24px;border-radius:12px;overflow-x:auto;}
+.code .c{color:#7a7a86;}
+.code .g{color:#8fd49b;}
+
+/* cta */
+.final{text-align:center;padding:80px 0;}
+.final h2{font-size:clamp(26px,4.5vw,38px);font-weight:900;letter-spacing:-.5px;margin-bottom:16px;}
+.final p{color:var(--muted);font-weight:300;margin-bottom:30px;}
+
+footer{padding:36px 0 56px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);line-height:1.9;border-top:1px solid var(--line);}
+footer a{color:var(--accent);text-decoration:none;}
+.series{margin-top:14px;}
+.series a{color:var(--muted);text-decoration:underline;text-underline-offset:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="wrap">
+<div class="brand">ai-website-building <span>/ skill</span></div>
+<a class="cta" href="https://github.com/pencil20388-eng/ai-website-building">GitHub ↗</a>
+</div>
+</nav>
+
+<header class="hero">
+<div class="wrap">
+<span class="badge">给不懂代码的人 · Claude Code Skill</span>
+<h1>零代码,用 AI 做出能交付上线的官网</h1>
+<p class="sub">市场、运营、产品,不写一行代码,从调研到交付,一个人几天内出一版能给开发上线的官网原型。这套方法把整个流程拆给你。</p>
+<div class="actions">
+<a class="btn btn-primary" href="https://github.com/pencil20388-eng/ai-website-building">查看完整方法</a>
+<a class="btn btn-ghost" href="#flow">先看流程</a>
+</div>
+<div class="meta">源自一次真实改版 · 1 个非技术人员 + AI · 约 2 周 · 100+ 轮迭代</div>
+</div>
+</header>
+
+<div class="band">
+<div class="wrap">
+<h2>核心理念,<b>人做决策,AI 做执行</b></h2>
+<p>AI 负责生成代码、改样式、处理图片、记录版本。人负责审美判断、品牌把关、信息取舍、最终拍板。AI 没有真正的审美,容易过度设计,必须靠人来说「够了」。</p>
+</div>
+</div>
+
+<section id="flow">
+<div class="wrap">
+<div class="eyebrow">主线流程</div>
+<h2 class="title">先定大方向,再逐块微调</h2>
+<p class="lead">不要一上来就让 AI 做全站,那样改起来是灾难。整个流程分两个阶段,中间靠大量调研托底。</p>
+<div class="steps">
+<div class="step"><div class="n">1</div><div><h3>先知道自己要什么</h3><p>动手前做足调研,国内外竞品、优秀 SaaS 官网、现成模板三类都看。看到合适的立刻存下来。心里有清晰的目标和参考,再让 AI 实现,比凭空让它给方案高效得多。</p></div></div>
+<div class="step"><div class="n">2</div><div><h3>出一版完整框架</h3><p>让 AI 按信息架构把整个页面搭出来,先看整体,不纠结细节。</p></div></div>
+<div class="step"><div class="n">3</div><div><h3>分模块逐块精修</h3><p>一次只盯一个模块。大改前让 AI 给「A 方案还是 B 方案」的选择题,不要让它盲改。大改时直接给参考图让它照着学。</p></div></div>
+<div class="step"><div class="n">4</div><div><h3>同步检查移动端</h3><p>每个模块在电脑上调好,一定再看一遍手机端。桌面端好看不代表手机端好看,要同步推进,别全做完才发现手机端乱了。</p></div></div>
+<div class="step"><div class="n">5</div><div><h3>换页面就重新调研</h3><p>首页、落地页、定价页,每个页面目标和受众都不同。换页面 = 重新调研,不要拿一次调研套所有页。</p></div></div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="eyebrow">这套方法覆盖什么</div>
+<h2 class="title">从第一句话到交付开发,全程</h2>
+<p class="lead">不只是「怎么让 AI 写页面」,而是一个非技术人员独立跑完整个项目需要的全部环节。</p>
+<div class="grid">
+<div class="cell"><div class="k">环境</div><h3>东西在哪运行</h3><p>不懂代码也能看懂的环境说明,东西在哪、怎么看见效果。</p></div>
+<div class="cell"><div class="k">成本</div><h3>省 token 策略</h3><p>先用低成本模型趟路调 prompt,高能力模型攻坚,省下大量开销。</p></div>
+<div class="cell"><div class="k">稳定</div><h3>多 agent 备份</h3><p>两个 agent 接管同一项目,一个崩了另一个立刻救场。</p></div>
+<div class="cell"><div class="k">红线</div><h3>避坑清单</h3><p>8 个真金白银踩出来的坑和红线规则,改动前必读。</p></div>
+<div class="cell"><div class="k">体系</div><h3>设计规范</h3><p>间距、字号、颜色、圆角、移动端的具体标准,让 AI 输出有体系感。</p></div>
+<div class="cell"><div class="k">配图</div><h3>图片处理</h3><p>AI 生成不了好图,怎么找现成素材、怎么避开透明背景变黑的坑。</p></div>
+<div class="cell"><div class="k">流量</div><h3>SEO 优化</h3><p>哪些前端能做、哪些走后台配置、哪些要技术介入,结合实战。</p></div>
+<div class="cell"><div class="k">交付</div><h3>交付开发</h3><p>交付物清单、需求文档模板、排期沟通、埋点要点。</p></div>
+<div class="cell"><div class="k">对齐</div><h3>沟通方法</h3><p>怎么和决策者对齐,给选择题不给问答题,减少反复推翻。</p></div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="eyebrow">先说清楚边界</div>
+<h2 class="title">什么能做,什么得交给开发</h2>
+<p class="lead">一个诚实的边界,免得你拿它去做做不到的事。</p>
+<div class="honesty">
+<h3>能「看」的它能做,要「用」的得交给开发</h3>
+<div class="row yes"><span class="tag">能做</span><span>官网首页、落地页、产品介绍页、活动页,这类给用户看的展示型静态页面</span></div>
+<div class="row no"><span class="tag">做不了</span><span>表单提交存数据、用户登录注册、读数据库、支付、账户后台,这类真实功能逻辑必须开发实现</span></div>
+<div class="row yes"><span class="tag">能做</span><span>AI 可以做出「长得像」的静态外壳,把视觉和结构先定下来</span></div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="wrap">
+<div class="eyebrow">三十秒上手</div>
+<h2 class="title">装进你的 AI 工具</h2>
+<p class="lead">支持 Claude Code、Cursor、Codex CLI 等。装好之后,让 AI 做官网时会自动套用这套方法。也可以当纯文档读。</p>
+<div class="code">
+<span class="c"># Claude Code,clone 到 skills 目录</span><br>
+<span class="g">mkdir</span> -p .claude/skills<br>
+<span class="g">git clone</span> https://github.com/pencil20388-eng/ai-website-building.git .claude/skills/ai-website-building
+</div>
+</div>
+</section>
+
+<div class="final wrap">
+<h2>下一次官网改版,你一个人就能起步</h2>
+<p>完整方法、避坑清单、设计规范、交付模板,全在仓库里。</p>
+<a class="btn btn-primary" href="https://github.com/pencil20388-eng/ai-website-building">在 GitHub 上查看 →</a>
+</div>
+
+<footer>
+<div class="wrap">
+由 <a href="https://www.adspower.net/">AdsPower</a> 内容团队构建 · 源自一次真实官网改版项目 · MIT License
+<div class="series">内容工作流系列,<a href="https://github.com/pencil20388-eng/content-topic-judgment">选题判断</a> · <a href="https://github.com/pencil20388-eng/stop-slop-zh">去 AI 味</a> · 做官网(本页)</div>
+</div>
+</footer>
+
+</body>
+</html>
